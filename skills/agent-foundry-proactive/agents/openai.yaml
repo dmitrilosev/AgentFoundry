@@ -1,0 +1,7 @@
+interface:
+  display_name: "AgentFoundry Proactive"
+  short_description: "Design proactive event watchers, reactions, and ADRs"
+  brand_color: "#3B82F6"
+  default_prompt: "Use $agent-foundry-proactive to ask for event watchers/reactions, research the product vertical, rank proactive features with RICE/RISE, and write the proactive ADR for this AgentFoundry app."
+policy:
+  allow_implicit_invocation: true

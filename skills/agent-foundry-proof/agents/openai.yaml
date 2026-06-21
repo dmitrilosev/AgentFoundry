@@ -1,0 +1,6 @@
+interface:
+  display_name: "AgentFoundry Proof"
+  short_description: "Creates Firebase-backed AgentFoundry iOS proofs."
+  default_prompt: "Use $agent-foundry-proof and its mandatory companion $agent-foundry-design to create an AgentFoundry SwiftUI iOS proof backed by Firebase Cloud Functions and the OpenAI Agents SDK, including a domain data model and safe agent tools when the product needs shared records."
+policy:
+  allow_implicit_invocation: true

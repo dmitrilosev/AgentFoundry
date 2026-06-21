@@ -1,0 +1,6 @@
+interface:
+  display_name: "AgentFoundry Artifact UI"
+  short_description: "Turns agent responses into durable native artifact UI."
+  default_prompt: "Use $agent-foundry-artifact-ui and its mandatory companion $agent-foundry-design to make a backend-owned agent response produce short Markdown, a typed durable artifact, an inline native SwiftUI card, and a detail surface that passes the centralized AgentFoundry design and visual QA baseline."
+policy:
+  allow_implicit_invocation: true

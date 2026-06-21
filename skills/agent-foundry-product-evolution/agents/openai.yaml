@@ -1,0 +1,6 @@
+interface:
+  display_name: "AgentFoundry Product Evolution"
+  short_description: "Turns user chats into approved native product-change proposals, Codex tasks, PRs, and release candidates."
+  default_prompt: "Use $agent-foundry-product-evolution and load $agent-foundry-design whenever proposals touch AgentFoundry SwiftUI UI, so approved product-change tasks include the centralized target baseline, native design system, Liquid Glass rules, clickability, keyboard dismissal, shadow/clipping checks, and visual QA."
+policy:
+  allow_implicit_invocation: true
