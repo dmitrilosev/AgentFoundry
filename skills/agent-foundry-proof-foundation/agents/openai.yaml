@@ -1,0 +1,4 @@
+interface:
+  display_name: "AgentFoundry Proof Foundation"
+  short_description: "Scaffolds the durable iOS and Firebase proof base."
+  default_prompt: "Use $agent-foundry-proof-foundation to scaffold the reusable SwiftUI, TCA, Firebase Auth, durable chat, and backend worker foundation for this AgentFoundry proof."

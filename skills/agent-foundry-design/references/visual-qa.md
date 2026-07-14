@@ -21,6 +21,15 @@ Verify visible states for changed workflows:
 - Failure with retry or next action.
 - Restored state after app relaunch or reload.
 
+## Product Hierarchy And Atmosphere
+
+- Navigation/continuity, durable workspace, and agent presence have distinct roles; the transcript does not dominate a product-object workflow.
+- The primary product object and its state are obvious within a few seconds.
+- Ambient color fields support the product mood without tinting every surface or reducing contrast.
+- The palette is specific to this product rather than a literal copy of TravelPlanner2.
+- Hero, panel, control, and compact radii form one coherent geometry rhythm.
+- Horizontal selectors or preview rails keep stable height and selection geometry.
+
 ## Clickability
 
 - Buttons, chips, cards, rows, close buttons, send buttons, toolbar items, and segmented controls have a 44x44 pt minimum hit area.

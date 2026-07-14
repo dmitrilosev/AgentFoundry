@@ -1,0 +1,13 @@
+.DS_Store
+.build/
+Derived/
+DerivedData/
+*.xcodeproj/
+*.xcworkspace/
+.package.resolved
+functions/lib/
+functions/node_modules/
+firebase-debug.log*
+App/Resources/GoogleService-Info.plist
+.env
+.env.*

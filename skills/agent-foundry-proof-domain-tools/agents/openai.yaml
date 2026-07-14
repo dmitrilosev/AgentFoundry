@@ -1,0 +1,4 @@
+interface:
+  display_name: "AgentFoundry Proof Domain Tools"
+  short_description: "Adds safe durable records and agent tools."
+  default_prompt: "Use $agent-foundry-proof-domain-tools to add owner-scoped durable records, validated domain operations, transactions, and OpenAI Agents SDK tools to this AgentFoundry proof."

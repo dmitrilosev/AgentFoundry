@@ -9,6 +9,8 @@ description: "Create, redesign, or review AgentFoundry SwiftUI iOS product UI wi
 
 Use this skill as the single design authority for AgentFoundry iOS products.
 
+Use TravelPlanner2 as the golden reference for composition and finish, distilled into the universal AgentFoundry product-workspace language. Reuse its hierarchy, atmosphere, continuity, soft geometry, selective glass, artifact-first detail, and floating agent presence; never copy travel-specific screens or colors by default.
+
 The goal is a native iOS 26 product that feels current, tactile, and polished: Liquid Glass surfaces, layered depth, Apple-style typography, SF Symbols, smooth motion, generous radii, vivid product-specific color, readable hierarchy, and real workflow screens. Do not accept boxy prototype UI, web-dashboard styling, raw JSON/debug output, placeholder-only screens, or decorative screens that do not make the product more useful.
 
 ## Required References
@@ -16,6 +18,7 @@ The goal is a native iOS 26 product that feels current, tactile, and polished: L
 Load only what is needed:
 
 - Read `references/design-system.md` before creating a new AgentFoundry SwiftUI app, redesigning a screen, or building reusable UI components.
+- Read `references/product-workspace-language.md` before defining a new product concept, primary workspace, palette, artifact surface, or agent/composer relationship.
 - Read `references/visual-qa.md` before declaring an AgentFoundry UI redesign or visual pass complete.
 
 When another AgentFoundry skill touches SwiftUI UI, target version, Liquid Glass, app surfaces, cards, sheets, navigation, tap targets, shadows, or visual QA, apply this skill before planning and again before final verification.
@@ -32,10 +35,11 @@ When another AgentFoundry skill touches SwiftUI UI, target version, Liquid Glass
 Start from a concept, not from repainting existing boxes.
 
 1. Identify the core product object and user workflow: chat, plan, comparison, tracker, case, order, approval, document, or another durable artifact.
-2. Define the visual concept in one or two sentences: product mood, information density, primary surface, and how glass/depth helps the workflow.
-3. Create or update a design system layer before scattering one-off modifiers through feature views.
-4. Redesign the main screens as native app surfaces with clear hierarchy, useful states, and platform interactions.
-5. Verify build, runtime UI, clickability, shadows, clipping, Dynamic Type, and dark/light appearance.
+2. Define the three-layer hierarchy: navigation/continuity, durable product workspace, and agent presence.
+3. Define the visual concept in one or two sentences: product mood, information density, primary surface, warm semantic signal, and how glass/depth helps the workflow.
+4. Create or update a design system layer before scattering one-off modifiers through feature views.
+5. Redesign the main screens as native app surfaces with clear hierarchy, useful states, and platform interactions.
+6. Verify build, runtime UI, clickability, shadows, clipping, Dynamic Type, and dark/light appearance.
 
 ## iOS 26 Liquid Glass Rules
 
@@ -64,6 +68,9 @@ Do not build card-in-card page layouts. Use cards for repeated domain objects, c
 ## Surface Rules
 
 - Design around the durable product artifact, not around the chat transcript. The detail screen must be useful without rereading the chat.
+- Prefer an atmospheric workspace composition: ambient product-specific background fields, one visually primary durable object, selective elevated glass, and a floating agent composer. Do not turn every section into a translucent card.
+- Use the universal radius rhythm from the product-workspace language: hero 32–36, panel 26–30, prominent controls 20–24, compact surfaces 16–18, adjusted only when the product concept calls for it.
+- In products with stages, options, dates, versions, or comparable objects, use a stable selector or horizontal preview rail whose geometry does not jump as selection changes.
 - Use SwiftUI-native navigation, sheets, full-screen covers, tabs, segmented controls, maps, charts, and lists where they match the workflow.
 - Keep chat readable: assistant Markdown remains text-forward; rich cards live outside the text bubble chrome.
 - In chat creation and chat composer screens, tapping free/non-interactive space must dismiss the keyboard without breaking message scrolling, card taps, text selection, or explicit controls.

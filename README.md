@@ -48,8 +48,10 @@ OSS maintenance, testing credits, and sponsorship support regression testing, ex
 
 | Skill | Codex ID | Use It To | Output |
 |---|---|---|---|
-| AgentFoundry Proof | `agent-foundry-proof` | Build the first real product path for an idea: iOS app, Firebase backend, and server-side OpenAI agent runtime. | A production-ready SwiftUI iOS proof with Firebase backend, authenticated durable chat, and backend-owned OpenAI agents built on the OpenAI Agents SDK. |
+| AgentFoundry Proof | `agent-foundry-proof` | Select and orchestrate the smallest capability contours for a product idea. | A verified production-proof workflow assembled from reusable templates instead of regenerated boilerplate. |
+| Proof Foundation | `agent-foundry-proof-foundation` | Scaffold the standard iOS/Firebase/OpenAI base used by every new proof. | Rendered Tuist/TCA app, authenticated durable chat, async backend worker, restore/polling, Markdown, and proof report. |
 | AgentFoundry Artifact UI | `agent-foundry-artifact-ui` | Turn useful agent outputs into durable typed artifacts and native product screens. | Typed durable artifacts, inline SwiftUI cards, renderer registry, and native detail or product surfaces. |
+| Proof Domain Tools | `agent-foundry-proof-domain-tools` | Add bookings, CRM records, orders, inventory, tasks, or other safe mutable operations. | Owner-scoped records, typed schemas, transactions, idempotency, audit fields, and Agents SDK tool adapters. |
 | AgentFoundry Design | `agent-foundry-design` | Apply the default AgentFoundry UI companion or bring a custom design direction or design system. | iOS 26.1 Liquid Glass baseline where supported, design-system rules, tap-target checks, accessibility, and visual QA gates. |
 | AgentFoundry Proactive | `agent-foundry-proactive` | Make the product do useful agent work over time and notify users through native surfaces or push notifications. | A proactive system design for watchers, signals, tasks, approvals, notifications, and native UX. |
 | AgentFoundry Product Evolution | `agent-foundry-product-evolution` | Turn conversation evidence into reviewed product work and approved repository changes. | An approval-gated product-management loop that analyzes conversation memory, proposes product changes, creates Codex-ready tasks, and prepares PR/release output. |
@@ -79,7 +81,9 @@ Open Codex and use `skill-installer` to install these skills from `dmitrilosev/A
 ```text
 Use $skill-installer to install AgentFoundry skills from dmitrilosev/AgentFoundry:
 skills/agent-foundry-proof
+skills/agent-foundry-proof-foundation
 skills/agent-foundry-artifact-ui
+skills/agent-foundry-proof-domain-tools
 skills/agent-foundry-design
 skills/agent-foundry-proactive
 skills/agent-foundry-product-evolution
@@ -161,13 +165,19 @@ AgentFoundry/
       SKILL.md
       references/
       agents/openai.yaml
+    agent-foundry-proof-foundation/
+      assets/template/
+      scripts/
+    agent-foundry-proof-domain-tools/
+      assets/overlay/
+      scripts/
     agent-foundry-artifact-ui/
     agent-foundry-design/
     agent-foundry-proactive/
     agent-foundry-product-evolution/
 ```
 
-Each skill directory contains the main skill instructions plus references that Codex loads only when the task needs them.
+The proof orchestrator selects three reusable capability contours: the required foundation, optional typed artifact UI, and optional operational domain tools. Template and overlay files live under `assets/`; deterministic scripts render them without loading their boilerplate into the model context. References are loaded only when a decision needs them.
 
 ## Notes For First-Time Users
 
