@@ -30,9 +30,9 @@ Prefer Firebase callable functions for authenticated app flows. Use HTTP functio
 
 The default proof uses Firebase Anonymous Auth so the iOS app can obtain a Firebase Auth ID token and the backend can verify the user before storing or loading chat history.
 
-As soon as the Firebase project ID is known or the user approves creating a new project, check whether Anonymous Auth is already enabled when metadata access is available. If it is not enabled or cannot be confirmed, ask for explicit approval for that exact project in the initial setup checklist, for example: `Разрешаю включить Anonymous Auth для <FIREBASE_PROJECT_ID>`.
+During read-only preflight, check whether Anonymous Auth is already enabled when metadata access is available. If it is not enabled or cannot be confirmed, include project-specific enablement in the single upfront authorization manifest.
 
-Treat enabling Anonymous Auth as a persistent Firebase security/config change requiring user approval. After approval, the agent owns enabling and verifying the provider. Do not defer this request until deploy or the final e2e smoke test.
+Treat enabling Anonymous Auth as a persistent Firebase security/config change covered by that ledger. After confirmation, the agent owns enabling and verifying the provider and must not ask again before retrying after billing/API propagation.
 
 ## Agent Response Markdown Contract
 
@@ -60,18 +60,18 @@ Example response shape:
 
 ## Blaze Readiness
 
-For Firebase Functions and Secret Manager-backed secrets in the AgentFoundry proof, treat Firebase Pay as you go / Blaze plan as a required planned setup prerequisite. Communicate this before asking the user to enter an OpenAI API key, because deployed Functions and backend secret wiring require the selected project to be billing-enabled.
+For Firebase Functions and Secret Manager-backed secrets in the AgentFoundry proof, treat Firebase Pay as you go / Blaze as a required planned setup prerequisite. Discover visible billing accounts during read-only preflight and include the exact proposed billing link in the single upfront authorization.
 
 After the Firebase project ID is known, tell the user:
 
 - This proof uses Firebase Functions and Secret Manager-backed secrets.
 - The selected Firebase project needs Pay as you go / Blaze plan before backend secrets/deploy can be configured.
-- If the Firebase console shows No-cost ($0/month) / Spark plan as Current Plan, the user needs to click/select Pay as you go / Blaze plan.
+- If the Firebase console shows No-cost ($0/month) / Spark plan as Current Plan, link the authorized billing account with available tooling or open the project-specific browser flow when the provider requires it.
 - Blaze links a billing account and is usage-based; many Firebase/Google Cloud services include no-cost quotas, but this is still a billing-enabled plan.
 - They should set a budget alert if they are concerned about spend.
 - Upgrade URL: `https://console.firebase.google.com/project/<FIREBASE_PROJECT_ID>/usage/details`
 
-Frame this as "planned backend setup" or "next setup step", not as an error. If the project is still on No-cost / Spark plan, stop with "switch Firebase to Pay as you go / Blaze plan" as the exact blocker before backend secret setup or deploy.
+Frame this in the upfront manifest as planned backend setup, including usage-based cost and payment-method implications. If the provider forces a payment/account action, surface that platform gate and poll billing metadata afterward. Do not ask for another permission or a `готово` reply.
 
 ## OpenAI Agents SDK
 
@@ -107,7 +107,7 @@ Unacceptable approaches:
 - A generic shared secret resource named only `OPENAI_API_KEY` chosen by default for a new project.
 - Auto-selecting a secret from a different Firebase/GCP project without user confirmation.
 
-## Secret Setup
+## Service And Secret Setup
 
 Generate a product-scoped provider secret resource name internally:
 
@@ -117,41 +117,43 @@ Generate a product-scoped provider secret resource name internally:
 - Do not ask the user to confirm the generated secret resource name unless they explicitly want to reuse an existing per-project secret.
 - If a provider SDK expects `OPENAI_API_KEY` as an environment variable, map the generated project-specific secret to that runtime variable inside the backend only.
 
-Before asking the user to enter the OpenAI API key, the agent must make Secret Manager ready for the selected project:
+Enable and verify all predictable backend services covered by the upfront ledger before credential promotion:
 
 ```sh
-gcloud services enable secretmanager.googleapis.com --project <FIREBASE_PROJECT_ID>
-gcloud services list --enabled --project <FIREBASE_PROJECT_ID> --filter='config.name:secretmanager.googleapis.com' --format='value(config.name)'
+gcloud services enable \
+  firebase.googleapis.com \
+  identitytoolkit.googleapis.com \
+  securetoken.googleapis.com \
+  firestore.googleapis.com \
+  secretmanager.googleapis.com \
+  cloudfunctions.googleapis.com \
+  cloudbuild.googleapis.com \
+  artifactregistry.googleapis.com \
+  run.googleapis.com \
+  eventarc.googleapis.com \
+  pubsub.googleapis.com \
+  storage.googleapis.com \
+  --project <FIREBASE_PROJECT_ID>
 ```
 
-The second command must print `secretmanager.googleapis.com` before the user sees the key entry block. If it does not, stop before key entry and report the Secret Manager API blocker. If the user already reached a hidden prompt and then saw `SERVICE_DISABLED`, tell them to press `Ctrl+C`, run `stty echo`, wait for API propagation, and retry only after the metadata check passes.
+Metadata-verify the complete enabled set. Retry initialization after normal propagation. Do not turn a transient `SERVICE_DISABLED` or billing propagation delay into another approval question.
 
-If the key is not available locally and the backend secret is missing, ask the user to create or copy an OpenAI API key from the OpenAI Platform API keys page and run only the ordinary Terminal.app zsh-compatible command below. Make this a clear current user action in the initial setup checklist; do not use vague deferred language like "when we get to backend secret."
+Resolve reuse-versus-new and the exact ignored staging destination in the single upfront authorization. Use the `openai-platform-api-key` workflow. A hosted picker may require organization/project selection, but after its follow-up continue directly without asking for key creation or destination confirmation again.
 
-Do not ask the user to enter the OpenAI API key until Blaze readiness is confirmed for Firebase backend secret setup and deploy.
+Do not ask the user to paste or manually enter the OpenAI API key. Do not inspect or print its value.
 
-Do not ask the user to paste the API key into chat. Do not use Codex hidden prompts, macOS `osascript` dialogs, helper scripts, `read -rsp`, `read -r -s`, inline `export OPENAI_API_KEY=...`, temporary secret files, or `firebase functions:secrets:set` for the user-facing key entry path.
+For a newly created key, use the dedicated ignored file confirmed in the upfront ledger, normally `<TARGET>/.env.agentfoundry-key.local`. Promote it without putting plaintext in command arguments:
 
 ```sh
-printf "OpenAI API key: "
-stty -echo
-IFS= read -r OPENAI_KEY
-stty echo
-printf "
-"
-
-if [ -z "$OPENAI_KEY" ]; then
-  echo "Key is empty; aborting."
-else
-  gcloud secrets describe <GENERATED_SECRET_RESOURCE_NAME> --project <FIREBASE_PROJECT_ID> >/dev/null 2>&1 || \
-    gcloud secrets create <GENERATED_SECRET_RESOURCE_NAME> --project <FIREBASE_PROJECT_ID> --replication-policy=automatic
-
-  printf "%s" "$OPENAI_KEY" | gcloud secrets versions add <GENERATED_SECRET_RESOURCE_NAME> --project <FIREBASE_PROJECT_ID> --data-file=-
-  unset OPENAI_KEY
-fi
+node <proof-skill-dir>/scripts/promote-openai-key.mjs \
+  --env-file <ABSOLUTE_CONFIRMED_STAGING_PATH> \
+  --env-name OPENAI_API_KEY \
+  --secret <GENERATED_SECRET_RESOURCE_NAME> \
+  --project <FIREBASE_PROJECT_ID> \
+  --delete-source
 ```
 
-The generated secret resource name should be product/project-specific. Verify only metadata with `gcloud secrets describe <GENERATED_SECRET_RESOURCE_NAME> --project=<FIREBASE_PROJECT_ID> --format="value(name)"`; do not print or access the secret value.
+Use `--delete-source` only for the dedicated staging file and only when it contains no unrelated variables. For reuse from an existing local env file, omit `--delete-source`. The helper creates the product-scoped resource when absent, sends the value through stdin, metadata-verifies it, and deletes the dedicated source only after a successful version add. Never print or access the stored secret value.
 
 ## Cloud Build Source Bucket IAM
 
@@ -167,7 +169,7 @@ Typical error shape:
 serviceAccount:<PROJECT_NUMBER>-compute@developer.gserviceaccount.com cannot read bucket gcf-v2-sources-<PROJECT_NUMBER>-<REGION>
 ```
 
-Treat this as a targeted IAM repair, not as a reason to hand deploy back to the user. Persistent IAM changes still require explicit user approval. Prefer the narrow bucket-level binding over a project-wide role:
+Treat this as a targeted IAM repair, not as a reason to hand deploy back to the user. Include this exact conditional repair class in the single upfront ledger. Prefer the narrow bucket-level binding over a project-wide role:
 
 ```sh
 gcloud storage buckets add-iam-policy-binding gs://gcf-v2-sources-<PROJECT_NUMBER>-<REGION> \
@@ -176,15 +178,15 @@ gcloud storage buckets add-iam-policy-binding gs://gcf-v2-sources-<PROJECT_NUMBE
   --project=<FIREBASE_PROJECT_ID>
 ```
 
-After the user approves this exact change, run it yourself, then immediately rerun `firebase deploy --only functions --project <FIREBASE_PROJECT_ID>` and the backend `curl` smoke test. Record the IAM change in the proof report as user-approved, bucket-scoped, and project-specific.
+If the ledger covers this exact condition, run it without another question, then immediately rerun `firebase deploy --only functions --project <FIREBASE_PROJECT_ID>` and the backend smoke test. Record the IAM change in the proof report as upfront-authorized, bucket-scoped, error-proven, and project-specific. Ask again only if the necessary mutation is materially different from the ledger.
 
 ## Verification
 
 Backend verification should include:
 
 - Dependency install/build passes.
-- Firebase Anonymous Auth is enabled for the selected project, or the proof stops with the earlier project-specific approval action.
-- Generated project-specific secret is set. If it is missing, ask the user to run the secure OpenAI API key setup command, then treat unresolved setup as the explicit blocker.
+- Firebase Anonymous Auth is enabled for the selected project under the upfront ledger, or the proof stops at the exact platform blocker.
+- Generated project-specific secret is set through the secure Platform/staging promotion path. If it is missing, resume that workflow rather than handing a Terminal command to the user.
 - Function runs locally or is deployed.
 - Endpoint responds to a test request.
 - Endpoint response includes the assistant answer as Markdown in the documented typed field.
@@ -201,4 +203,4 @@ gcloud secrets describe <GENERATED_SECRET_RESOURCE_NAME> --project=<FIREBASE_PRO
 
 Do not run unredacted secret access commands that print the secret value.
 
-If deployment requires billing, project ownership, account login, or region selection that is unavailable, stop and record the exact required user action.
+If deployment requires a platform-owned payment, ownership, login, OAuth/2FA, immutable region choice, or other action the agent cannot perform, surface only that exact gate and record it. Do not ask for a status reply; poll or consume the platform result when available.

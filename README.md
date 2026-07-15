@@ -50,6 +50,7 @@ OSS maintenance, testing credits, and sponsorship support regression testing, ex
 |---|---|---|---|
 | AgentFoundry Proof | `agent-foundry-proof` | Select and orchestrate the smallest capability contours for a product idea. | A verified production-proof workflow assembled from reusable templates instead of regenerated boilerplate. |
 | Proof Foundation | `agent-foundry-proof-foundation` | Scaffold the standard iOS/Firebase/OpenAI base used by every new proof. | Rendered Tuist/TCA app, authenticated durable chat, async backend worker, restore/polling, Markdown, and proof report. |
+| AgentFoundry App Icon | `agent-foundry-app-icon` | Design, generate, integrate, and verify a distinctive production iOS App Icon. | English generation prompt, opaque 1024x1024 master, 40x40 QA, compiled AppIcon asset, and runtime evidence. |
 | AgentFoundry Artifact UI | `agent-foundry-artifact-ui` | Turn useful agent outputs into durable typed artifacts and native product screens. | Typed durable artifacts, inline SwiftUI cards, renderer registry, and native detail or product surfaces. |
 | Proof Domain Tools | `agent-foundry-proof-domain-tools` | Add bookings, CRM records, orders, inventory, tasks, or other safe mutable operations. | Owner-scoped records, typed schemas, transactions, idempotency, audit fields, and Agents SDK tool adapters. |
 | AgentFoundry Design | `agent-foundry-design` | Apply the default AgentFoundry UI companion or bring a custom design direction or design system. | iOS 26.1 Liquid Glass baseline where supported, design-system rules, tap-target checks, accessibility, and visual QA gates. |
@@ -82,6 +83,7 @@ Open Codex and use `skill-installer` to install these skills from `dmitrilosev/A
 Use $skill-installer to install AgentFoundry skills from dmitrilosev/AgentFoundry:
 skills/agent-foundry-proof
 skills/agent-foundry-proof-foundation
+skills/agent-foundry-app-icon
 skills/agent-foundry-artifact-ui
 skills/agent-foundry-proof-domain-tools
 skills/agent-foundry-design
@@ -168,6 +170,8 @@ AgentFoundry/
     agent-foundry-proof-foundation/
       assets/template/
       scripts/
+    agent-foundry-app-icon/
+      references/prompt-template.md
     agent-foundry-proof-domain-tools/
       assets/overlay/
       scripts/
@@ -177,13 +181,13 @@ AgentFoundry/
     agent-foundry-product-evolution/
 ```
 
-The proof orchestrator selects three reusable capability contours: the required foundation, optional typed artifact UI, and optional operational domain tools. Template and overlay files live under `assets/`; deterministic scripts render them without loading their boilerplate into the model context. References are loaded only when a decision needs them.
+The proof orchestrator composes the required foundation and production App Icon with optional typed artifact UI and operational domain tools. Template and overlay files live under `assets/`; deterministic scripts render them without loading their boilerplate into the model context. References are loaded only when a decision needs them.
 
 ## Notes For First-Time Users
 
 - Run these skills from the target app repository, not from this skill-pack repository.
-- Expect the proof skill to ask for product name, bundle identifier, Firebase project decisions, Firebase Anonymous Auth approval, Firebase Blaze readiness, and server-side OpenAI API key setup.
-- Do not paste API keys into chat. The proof skill references define a terminal-based secret setup path.
+- Expect one upfront authorization manifest covering product identity, scaffold, Firebase project/region/billing, required APIs, Anonymous Auth, Firestore, OpenAI key setup and App Icon Image API use, deploy, and narrow conditional IAM. The skill must not split these into serial confirmations.
+- Do not paste API keys into chat or Terminal. The proof skill uses the secure OpenAI Platform flow, a dedicated ignored staging file, direct Secret Manager promotion, and post-upload cleanup.
 - The detailed hard gates live in each skill's `SKILL.md`. This README is only the entry point.
 
 ## Maintainer

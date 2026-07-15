@@ -1,0 +1,6 @@
+interface:
+  display_name: "AgentFoundry App Icon"
+  short_description: "Generates and ships a production iOS app icon."
+  default_prompt: "Use $agent-foundry-app-icon to design, generate, validate, install, and verify a production iOS app icon for this product."
+policy:
+  allow_implicit_invocation: true

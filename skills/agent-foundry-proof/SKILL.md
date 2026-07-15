@@ -1,6 +1,6 @@
 ---
 name: agent-foundry-proof
-description: "Orchestrate the first production proof of an AgentFoundry AI-native iOS product. Use for a new product idea that needs a real SwiftUI/TCA iPhone app, Firebase-authenticated durable chat, backend OpenAI Agents SDK work, and optionally typed artifact UI or safe operational domain tools. This skill selects and applies reusable proof contours instead of regenerating boilerplate."
+description: "Orchestrate the first production proof of an AgentFoundry AI-native iOS product with one upfront setup authorization and autonomous continuation. Use for a new product idea that needs a real SwiftUI/TCA iPhone app, a generated and verified production App Icon, Firebase-authenticated durable chat, backend OpenAI Agents SDK work, and optionally typed artifact UI or safe operational domain tools. This skill selects and applies reusable proof contours instead of regenerating boilerplate."
 ---
 
 # AgentFoundry Proof
@@ -14,6 +14,7 @@ Turn a product idea into the smallest real AgentFoundry iPhone proof:
 - server-owned OpenAI Agents SDK runtime and secret;
 - durable sessions/messages with asynchronous agent work and restore;
 - product-specific design derived from the TravelPlanner2 golden reference;
+- generated product-specific App Icon, compiled into the app and verified at runtime;
 - optional native durable artifact and/or operational records;
 - build, deployment, runtime evidence, and a completed proof report.
 
@@ -24,8 +25,10 @@ Do not generate this architecture from scratch. Compose the bundled capability s
 Always read and apply:
 
 1. `references/product-proof-contract.md` for completion and stop gates.
-2. `../agent-foundry-design/SKILL.md`, including its routed design references.
-3. `../agent-foundry-proof-foundation/SKILL.md` for every new proof.
+2. `references/upfront-authorization.md` for the single permission request and authorization ledger.
+3. `../agent-foundry-design/SKILL.md`, including its routed design references.
+4. `../agent-foundry-proof-foundation/SKILL.md` for every new proof.
+5. `../agent-foundry-app-icon/SKILL.md` after the product design concept is defined.
 
 Load only when needed:
 
@@ -50,28 +53,27 @@ Choose before implementation and record the choice in the proof report.
 
 Do not add domain tools merely because the backend uses Firestore for chat. Do not omit artifact UI when the useful output is a durable product object and text alone would leave the app as a chat wrapper. Keep `agent-foundry-proactive` outside the first proof unless the user explicitly asks for proactive behavior.
 
-## Setup Handshake
+## Read-Only Preflight And Single Authorization
 
-Confirm or discover without guessing:
+Discover without mutating or exposing credentials:
 
 - product display name, Swift name, slug, and bundle identifier;
 - one-sentence first agent workflow and durable core object;
 - existing target directory versus a new project;
-- Firebase project chosen by the user, or explicit approval to create a named project;
+- Firebase project and billing state/options;
 - Firebase region;
 - selected capability contours;
-- preferred real iPhone when connected, otherwise Simulator.
+- reusable existing OpenAI credential presence versus a new product-scoped key;
+- preferred real iPhone when connected, otherwise Simulator;
+- one proposed App Icon metaphor direction, product-aligned palette, generation output paths, and Image API use covered by the upfront ledger.
 
-Lists of local Firebase/GCP projects are discovery only. Never select a project, change Firebase configuration, enable Anonymous Auth, enable APIs, attach billing, create secrets, deploy, or change IAM merely because a matching project exists.
+Lists of local Firebase/GCP/OpenAI/Apple resources are discovery only. Never select or mutate them merely because a matching resource exists.
 
-Once the Firebase project is selected, check these early while independent local work continues:
+Before scaffold or any persistent mutation, follow `references/upfront-authorization.md`: present one complete manifest covering product/scaffold values, Firebase project and immutable region, billing/Blaze, Anonymous Auth, Firestore, all required service APIs, app registration, secret and deploy, OpenAI key reuse/creation plus exact ignored staging path, narrow conditional IAM, and Apple signing when applicable. Ask for one confirmation only.
 
-1. Anonymous Auth state. Enabling it is persistent and requires explicit project-specific approval.
-2. Pay as you go / Blaze readiness. Functions plus Secret Manager require billing-enabled backend setup; switching plans is a user action.
-3. Secret Manager API state. Enabling it is persistent and requires approval if not already authorized.
-4. Generated product-scoped secret metadata: `AGENTFOUNDRY_<PRODUCT_SLUG>_OPENAI_API_KEY`.
+After confirmation, record an authorization ledger and continue autonomously. Do not ask separately before scaffold, Firebase project creation, billing linkage, API enablement, Anonymous Auth, Firestore creation, OpenAI key creation/destination, secret upload, deploy, or ledger-covered narrow IAM. Do not ask the user to reply `готово`; verify state directly and resume.
 
-Read `references/backend-architecture.md` for the exact secure Terminal.app key-entry block and project-specific Blaze URL. Never request an API key in chat, pass it to a scaffold script, write it to a file, print it, or use a generic cross-project secret by default.
+Use `openai-platform-api-key` for secure key reuse/creation. Treat the single upfront manifest as that skill's required credential-decision message: it must be the next substantive message after safe credential inspection, resolve reuse versus creation, and confirm the exact ignored local staging destination. Do not send a standalone credential question or invoke a second destination-confirmation form when the ledger contains the exact path. A hosted picker may still require the user to select an OpenAI organization/project, but its follow-up is not a new permission question. Continue automatically, transfer the key with `scripts/promote-openai-key.mjs`, verify secret metadata, and delete only the dedicated staging file. Never request or print a plaintext key, pass it to a scaffold command, or use a generic cross-project secret by default.
 
 ## Execution
 
@@ -119,21 +121,31 @@ iOS creates stable session/message ids
 
 Repeated submission of the same message id must not duplicate messages or jobs.
 
-### 5. Configure Firebase
+### 5. Configure Firebase And Credentials
 
-After the relevant approvals/user actions:
+After the single setup authorization:
 
+- create or select the exact authorized Firebase project and link the authorized billing account when applicable;
 - register the exact iOS bundle id and install `GoogleService-Info.plist` without committing secrets;
 - enable/verify Anonymous Auth;
-- enable/verify Secret Manager API;
-- verify the generated product-specific secret by metadata only;
+- enable/verify Firestore, Secret Manager, Functions, Cloud Build, Artifact Registry, Cloud Run, Eventarc, Pub/Sub, Cloud Storage, Firebase, Identity Toolkit, and Secure Token APIs in one batch where possible;
+- create/verify the default Firestore database in the authorized immutable region;
+- create or securely reuse the authorized OpenAI API key through `openai-platform-api-key`, promote it into the generated product-specific secret by metadata-only verification, and remove a dedicated temporary staging file;
 - install/build backend dependencies;
 - deploy rules/indexes/functions to the user-selected project;
-- repair deploy IAM only with narrow, explicit approval as described in `references/backend-architecture.md`.
+- apply only authorization-ledger-covered, error-proven, narrow IAM repair as described in `references/backend-architecture.md`.
 
-If Blaze, login, project ownership, API-key entry, or another user-only prerequisite blocks deployment, finish all independent code and tests, then report the single exact action still required. Never replace the real agent with a mock to claim completion.
+Drive available browser/tool flows for billing and credentials, poll metadata after platform gates, and continue without asking for a status reply. Login, OAuth/2FA, payment method, hosted OpenAI picker, OS permission, Apple account/team, and physical device trust may still require direct user interaction because the platform owns those gates. If one blocks deployment, finish independent work and surface only that exact platform action. Never replace the real agent with a mock to claim completion.
 
-### 6. Verify
+### 6. Generate And Ship The App Icon
+
+Run `agent-foundry-app-icon` after the visual concept/color story exist and the authorized product-scoped credential is usable. Derive one simple product-specific metaphor, write the detailed English prompt, generate an opaque full-bleed 1024x1024 master, inspect it at full size and 40x40, and make only targeted iterations.
+
+Persist the master in `output/imagegen`, wire it into `AppIcon.appiconset`, regenerate the source project graph when required, and verify `actool`, built bundle icon files/`Assets.car`, primary-icon metadata, install, and launch. Do not claim completion from an image file or successful build alone.
+
+Image generation, authorized key use, project asset mutation, signing, install, and launch must be covered by the single upfront ledger. Reuse the already authorized product-scoped credential path without printing or persisting plaintext and without starting a second key-creation flow.
+
+### 7. Verify
 
 Run the foundation validator, backend build/tests, Tuist generation, iOS tests/build, and real runtime smoke test. Prefer a connected usable iPhone; otherwise use Simulator.
 
@@ -147,6 +159,7 @@ Evidence must prove:
 - close/relaunch restores sessions and selected context safely;
 - retrying a message id is idempotent;
 - selected artifact/domain contour restores and enforces its contract;
+- the final App Icon is opaque 1024x1024, remains legible at 40x40, is compiled by `actool`, appears in primary-icon bundle metadata, and the build containing it installs/launches on the selected target;
 - no provider secret or Firebase import exists in feature modules;
 - main design states pass clickability, shadow/clipping, light/dark, and Dynamic Type QA.
 
@@ -154,6 +167,6 @@ Scaffold validation alone is not production-proof evidence.
 
 ## Completion
 
-Complete `AGENTFOUNDRY_PROOF_REPORT.md` using `references/proof-report.md`. Include capability selection, architecture, Firebase project/region, secret resource name only, approved persistent changes, build/deploy commands and outcomes, runtime evidence, design concept, verified states, and remaining blockers.
+Complete `AGENTFOUNDRY_PROOF_REPORT.md` using `references/proof-report.md`. Include capability selection, architecture, Firebase project/region, secret resource name only, approved persistent changes, build/deploy commands and outcomes, runtime evidence, design concept, App Icon metaphor/prompt/master/asset/build evidence, verified states, and remaining blockers.
 
 Claim the proof complete only when `references/product-proof-contract.md` passes. Otherwise state the exact smallest blocker and do not describe planned or mocked behavior as verified.

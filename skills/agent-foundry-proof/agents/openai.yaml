@@ -1,6 +1,6 @@
 interface:
   display_name: "AgentFoundry Proof"
-  short_description: "Composes a production iOS proof from reusable contours."
-  default_prompt: "Use $agent-foundry-proof to compose this product idea from the reusable foundation, mandatory $agent-foundry-design language, and only the artifact or domain contours the product needs; then verify the real Firebase/OpenAI path and complete the proof report."
+  short_description: "Composes a branded production iOS proof end to end."
+  default_prompt: "Use $agent-foundry-proof to run read-only preflight, collect one complete setup authorization, compose the product and production App Icon from reusable contours, and autonomously verify the real Firebase/OpenAI path through the proof report."
 policy:
   allow_implicit_invocation: true
